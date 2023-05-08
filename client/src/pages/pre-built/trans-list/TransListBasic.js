@@ -133,29 +133,7 @@ const TransListBasic = () => {
     });
   };
 
-  // function to close the form modal
-  const onFormCancel = () => {
-    setModal({ add: false });
-    resetForm();
-  };
-
-  // submit function to add a new item
-  const onFormSubmit = (submitData) => {
-    const { bill, total } = submitData;
-    let submittedData = {
-      id: data.length + 1,
-      ref: 4970 + data.length,
-      bill: bill,
-      issue: dateFormatterAlt(formData.issue, true),
-      due: dateFormatterAlt(formData.due, true),
-      total: total + ".00",
-      status: formData.status,
-    };
-    setData([submittedData, ...data]);
-
-    resetForm();
-    setModal({ add: false });
-  };
+  
 
   // function to load detail data
   const loadDetail = (id) => {
@@ -321,16 +299,24 @@ const TransListBasic = () => {
                       </th>
                       <th className="tb-tnx-info">
                         <span className="tb-tnx-desc d-none d-sm-inline-block">
-                          <span>Bill For</span>
+                          <span>User</span>
+                        </span>
+                        
+                      </th>
+                      <th className="tb-tnx-info">
+                        <span className="tb-tnx-desc d-none d-sm-inline-block">
+                          <span>Item Name</span>
                         </span>
                         <span className="tb-tnx-date d-md-inline-block d-none">
                           <span className="d-md-none">Date</span>
                           <span className="d-none d-md-block">
-                            <span>Issue Date</span>
+                            <span>Order Date</span>
                             <span>Amount</span>
                           </span>
                         </span>
                       </th>
+                      
+                      
                       <th className="tb-tnx-amount is-alt">
                         <span className="tb-tnx-total">Type</span>
                         <span className="tb-tnx-status d-none d-md-inline-block">Status</span>
@@ -357,12 +343,20 @@ const TransListBasic = () => {
                               </td>
                               <td className="tb-tnx-info">
                                 <div className="tb-tnx-desc">
-                                  <span className="title">{item.department}</span>
+                                  <span className="title">{item.title}</span>
                                 </div>
+                                
                                 <div className="tb-tnx-date">
                                   <span className="date">{item.date}</span>
                                   <span className="date">{item.type}</span>
                                 </div>
+                              </td>
+                              <td className="tb-tnx-info">
+                                <div className="tb-tnx-desc">
+                                  <span className="title">{item.user}</span>
+                                </div>
+                                
+                                
                               </td>
                               <td className="tb-tnx-amount is-alt">
                                 <div className="tb-tnx-total">
@@ -371,9 +365,9 @@ const TransListBasic = () => {
                                 <div className="tb-tnx-status">
                                   <Badge
                                     className="badge-dot"
-                                    color={ item.type === "spending" ? "danger" : "success" }
+                                    color={ item.status === "pending" ? "danger" : "success" }
                                   >
-                                    {item.type === "spending"? "Paid":"Received"}
+                                    {item.type === "pending"? "Pending":"Fullfilled"}
                                   </Badge>
                                 </div>
                               </td>
@@ -444,105 +438,7 @@ const TransListBasic = () => {
           </Card>
         </Block>
 
-        <Modal isOpen={modal.add} toggle={() => setModal({ add: false })} className="modal-dialog-centered" size="lg">
-          <ModalBody>
-            <a
-              href="#cancel"
-              onClick={(ev) => {
-                ev.preventDefault();
-                onFormCancel();
-              }}
-              className="close"
-            >
-              <Icon name="cross-sm"></Icon>
-            </a>
-            <div className="p-2">
-              <h5 className="title">Add Bill</h5>
-              <div className="mt-4">
-                <Form className="row gy-4 mt-4" onSubmit={handleSubmit(onFormSubmit)}>
-                  <Col md="6">
-                    <div className="form-group">
-                      <label className="form-label">Bill</label>
-                      <input
-                        className="form-control"
-                        ref={register({ required: "This field is required" })}
-                        type="text"
-                        name="bill"
-                        defaultValue={formData.bill}
-                        placeholder="Enter bill"
-                      />
-                      {errors.bill && <span className="invalid">{errors.bill.message}</span>}
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="form-group">
-                      <label className="form-label">Total</label>
-                      <input
-                        className="form-control"
-                        ref={register({ required: "This field is required" })}
-                        type="number"
-                        name="total"
-                        defaultValue={formData.total}
-                      />
-                      {errors.total && <span className="invalid">{errors.total.message}</span>}
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="form-group">
-                      <label className="form-label">Issue Date</label>
-                      <DatePicker
-                        selected={formData.issue}
-                        className="form-control"
-                        onChange={(date) => setFormData({ ...formData, issue: date })}
-                        minDate={new Date()}
-                      />
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="form-group">
-                      <label className="form-label">Due Date</label>
-                      <DatePicker
-                        selected={formData.due}
-                        className="form-control"
-                        onChange={(date) => setFormData({ ...formData, due: date })}
-                        minDate={new Date()}
-                      />
-                    </div>
-                  </Col>
-                  <Col md="12">
-                    <div className="form-group">
-                      <label className="form-label">Status</label>
-                      <div className="form-control-wrap">
-                        
-                      </div>
-                    </div>
-                  </Col>
-                  <Col size="12">
-                    <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                      <li>
-                        <Button color="primary" size="md" type="submit">
-                          Add Bill
-                        </Button>
-                      </li>
-                      <li>
-                        <a
-                          href="#cancel"
-                          onClick={(ev) => {
-                            ev.preventDefault();
-                            onFormCancel();
-                          }}
-                          className="link link-light"
-                        >
-                          Cancel
-                        </a>
-                      </li>
-                    </ul>
-                  </Col>
-                </Form>
-              </div>
-            </div>
-          </ModalBody>
-        </Modal>
+        
 
         <Modal isOpen={viewModal} toggle={() => setViewModal(false)} className="modal-dialog-centered" size="lg">
           <ModalBody>
@@ -558,7 +454,7 @@ const TransListBasic = () => {
             </a>
             <div className="nk-modal-head">
               <h4 className="nk-modal-title title">
-                Transaction <small className="text-primary">#{detail.ref}</small>
+                Orders <small className="text-primary">#{detail.ref}</small>
               </h4>
             </div>
             <div className="nk-tnx-details mt-sm-3">
@@ -568,29 +464,29 @@ const TransListBasic = () => {
                   <span className="caption-text">{detail.ref}</span>
                 </Col>
                 <Col lg={6}>
-                  <span className="sub-text">Bill </span>
-                  <span className="caption-text text-break">{detail.bill}</span>
+                  <span className="sub-text">Item Name </span>
+                  <span className="caption-text text-break">{detail.title}</span>
                 </Col>
                 <Col lg={6}>
-                  <span className="sub-text">Transaction Fee</span>
-                  <span className="caption-text">$ {detail.total}</span>
+                  <span className="sub-text">Amount</span>
+                  <span className="caption-text">PKR {detail.amount}</span>
                 </Col>
                 <Col lg={6}>
                   <span className="sub-text">Status</span>
                   <Badge
-                    color={detail.status === "Paid" ? "success" : detail.status === "Due" ? "warning" : "danger"}
+                    color={detail.status === "Paid" ? "success" : detail.status === "pending" ? "warning" : "danger"}
                     size="md"
                   >
                     {detail.status}
                   </Badge>
                 </Col>
                 <Col lg={6}>
-                  <span className="sub-text">Issue Date</span>
-                  <span className="caption-text"> {detail.issue}</span>
+                  <span className="sub-text"> Date</span>
+                  <span className="caption-text"> {detail.date}</span>
                 </Col>
                 <Col lg={6}>
-                  <span className="sub-text">Due Date</span>
-                  <span className="caption-text"> {detail.due}</span>
+                  <span className="sub-text"> User Name</span>
+                  <span className="caption-text"> {detail.user}</span>
                 </Col>
               </Row>
             </div>
