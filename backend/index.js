@@ -11,7 +11,7 @@ require("dotenv").config();
 
 //Project files and routes
 const app=express();
-//const apiRouter = require("./Routes");
+const apiRouter = require("./Routes");
 const connect = require("./Config/db");
 
 
@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //connecting routes
-//app.use("/api", apiRouter);
+app.use("/api", apiRouter);
 // const io = socketIO(server);
 
 

@@ -1,4 +1,3 @@
-const { model } = require('mongoose')
 const adminModel = require('../../Models/Admin/user')
 const generateToken = require('../../Utils/generateToken')
 
@@ -48,4 +47,5 @@ module.exports.login = async (req, res) => {
     }
 
 }
+
     

@@ -4,13 +4,13 @@ const router = require('express').Router();
 // Controllers
 const {
     login
-}= require('../Controllers/Admin/auth')
+}= require('../../Controllers/Admin/auth')
 
 //middlewares
 const
 {
     adminAuthMiddleware
-} = require('../Middleware/verifyAdmin')
+} = require('../../Middleware/verifyAdmin')
 
 
 
